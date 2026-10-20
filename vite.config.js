@@ -12,7 +12,9 @@ export default defineConfig({
         'V1/form/index': resolve(__dirname, 'samples/V1/form/index.html'),
         'V1/table/index': resolve(__dirname, 'samples/V1/table/index.html'),
         'V2/form': resolve(__dirname, 'samples/V2/form.html'),
-        'V2/table': resolve(__dirname, 'samples/V2/table.html')
+        'V2/table': resolve(__dirname, 'samples/V2/table.html'),
+        'V5/form': resolve(__dirname, 'samples/v5/form.html'),
+        'V6/form': resolve(__dirname, 'samples/v6/form.html')
       }
     }
   }
