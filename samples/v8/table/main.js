@@ -1,8 +1,8 @@
-import { runPipeline, meta } from '../../src/v7/index.js';
-import tableConfig from './table-instructions.json' with { type: 'json' };
+import { runPipeline, meta } from '../../../src/v8/index.js';
+import tableConfig from './instructions.json' with { type: 'json' };
 
 console.log(`${meta.name} [${meta.version}] Table Engine ready.`);
-console.log('Table Recipes:', tableConfig);
+console.log('Active Table Recipes:', tableConfig);
 
 const rowOutput = document.querySelector('#rowOutput');
 const footerOutput = document.querySelector('#footerOutput');
@@ -14,7 +14,7 @@ rowButtons.forEach(btn => {
     // Pipeline: button -> closest 'tr' -> queryAll 'td[data-field]' -> toObject
     const rowData = runPipeline(event.currentTarget, tableConfig.rowRecipe);
 
-    console.log('Extracted Row Object:', rowData);
+    console.log('V8 Extracted Row Object:', rowData);
 
     if (rowOutput) {
       rowOutput.textContent = JSON.stringify(rowData, null, 2);
@@ -29,7 +29,7 @@ if (footerButton) {
     // Pipeline: button -> closest 'tfoot' -> queryAll 'td[data-field]' -> toObject
     const footerData = runPipeline(event.currentTarget, tableConfig.footerRecipe);
 
-    console.log('Extracted Footer Object:', footerData);
+    console.log('V8 Extracted Footer Object:', footerData);
 
     if (footerOutput) {
       footerOutput.textContent = JSON.stringify(footerData, null, 2);

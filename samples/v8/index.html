@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DOM Primitive Engine V7 — Samples Dashboard</title>
+  <title>DOM Primitive Engine V8 — Dashboard</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -19,7 +19,7 @@
     .card {
       background: #ffffff;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       padding: 36px 32px;
       border-radius: 12px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
@@ -56,13 +56,13 @@
     }
     .menu a {
       display: block;
-      padding: 14px 20px;
+      padding: 16px 20px;
       background: #f1f5f9;
       color: #1e293b;
       text-decoration: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 1rem;
       border: 1px solid #cbd5e1;
       transition: all 0.15s ease;
       text-align: left;
@@ -75,27 +75,27 @@
     }
     .menu a span {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       font-weight: normal;
-      opacity: 0.8;
-      margin-top: 3px;
+      opacity: 0.85;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <span class="badge">V7 Dynamic Engine</span>
+    <span class="badge">V8 Modular Architecture</span>
     <h1>DOM Primitive Engine</h1>
-    <p>Pure primitives + declarative JSON recipe pipelines</p>
+    <p>Pure primitives + declarative JSON recipe pipelines for form & table extraction</p>
 
     <div class="menu">
-      <a href="./form.html">
-        📝 Form Sample
-        <span>Extract Name & Mobile Number via form recipe</span>
+      <a href="./form/index.html">
+        📝 Form Extraction Module (<code>samples/v8/form/</code>)
+        <span>Extracts Name, Mobile & City inputs using the form JSON recipe</span>
       </a>
-      <a href="./table.html">
-        📊 Table & Footer Sample
-        <span>Extract individual row TDs and footer totals via table recipes</span>
+      <a href="./table/index.html">
+        📊 Table & Footer Module (<code>samples/v8/table/</code>)
+        <span>Extracts individual row TD content & table footer summary via table JSON recipes</span>
       </a>
     </div>
   </div>

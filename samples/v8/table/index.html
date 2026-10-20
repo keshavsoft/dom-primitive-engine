@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DOM Primitive Engine V7 — Table & Footer Sample</title>
+  <title>V8 — Table & Footer Extraction</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -19,27 +19,24 @@
     .container {
       background: #ffffff;
       width: 100%;
-      max-width: 720px;
+      max-width: 780px;
       padding: 32px;
       border-radius: 12px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
       border: 1px solid #e2e8f0;
     }
-    .nav-links {
+    .nav-bar {
       display: flex;
       gap: 12px;
       margin-bottom: 20px;
-    }
-    .nav-links a {
       font-size: 0.85rem;
+    }
+    .nav-bar a {
       color: #2563eb;
       text-decoration: none;
       font-weight: 600;
     }
-    .nav-links a.active {
-      color: #0f172a;
-      text-decoration: underline;
-    }
+    .nav-bar a:hover { text-decoration: underline; }
     .badge {
       display: inline-block;
       padding: 4px 10px;
@@ -82,17 +79,13 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    tbody tr:hover {
-      background: #f8fafc;
-    }
+    tbody tr:hover { background: #f8fafc; }
     tfoot {
       background: #f8fafc;
       font-weight: 600;
       border-top: 2px solid #cbd5e1;
     }
-    tfoot td {
-      border-bottom: none;
-    }
+    tfoot td { border-bottom: none; }
     .btn-action {
       padding: 6px 12px;
       background: #2563eb;
@@ -104,15 +97,9 @@
       cursor: pointer;
       transition: background 0.15s ease;
     }
-    .btn-action:hover {
-      background: #1d4ed8;
-    }
-    .btn-footer {
-      background: #0f172a;
-    }
-    .btn-footer:hover {
-      background: #1e293b;
-    }
+    .btn-action:hover { background: #1d4ed8; }
+    .btn-footer { background: #0f172a; }
+    .btn-footer:hover { background: #1e293b; }
     .outputs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -145,55 +132,60 @@
 </head>
 <body>
   <div class="container">
-    <div class="nav-links">
-      <a href="./form.html">← Form Sample</a>
+    <div class="nav-bar">
+      <a href="../index.html">← V8 Dashboard</a>
       <span>•</span>
-      <a href="./table.html" class="active">Table & Footer Sample</a>
+      <a href="../form/index.html">Go to Form Sample →</a>
     </div>
 
-    <span class="badge">V7 Dynamic Pipeline</span>
+    <span class="badge">V8 Separate Module</span>
     <h1>Table & Footer Extraction</h1>
     <p class="subtitle">Extracts individual row TD content or table footer summaries via JSON recipes</p>
 
-    <table id="employeesTable">
+    <table id="recordsTable">
       <thead>
         <tr>
           <th>ID</th>
           <th>Name</th>
           <th>Role</th>
+          <th>City</th>
           <th>Salary</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td data-field="id">EMP-01</td>
-          <td data-field="name">Keshav</td>
-          <td data-field="role">Lead Architect</td>
-          <td data-field="salary">₹1,20,000</td>
+          <td data-field="id">101</td>
+          <td data-field="name">Alpha Enterprise</td>
+          <td data-field="role">Supplier</td>
+          <td data-field="city">Hyderabad</td>
+          <td data-field="salary">₹1,50,000</td>
           <td><button type="button" class="btn-action btn-read-row">Read Row</button></td>
         </tr>
         <tr>
-          <td data-field="id">EMP-02</td>
-          <td data-field="name">Maya</td>
-          <td data-field="role">Senior UI Engineer</td>
-          <td data-field="salary">₹95,000</td>
+          <td data-field="id">102</td>
+          <td data-field="name">Beta Logistics</td>
+          <td data-field="role">Transporter</td>
+          <td data-field="city">Bengaluru</td>
+          <td data-field="salary">₹90,000</td>
           <td><button type="button" class="btn-action btn-read-row">Read Row</button></td>
         </tr>
         <tr>
-          <td data-field="id">EMP-03</td>
-          <td data-field="name">Suresh</td>
-          <td data-field="role">Product Designer</td>
-          <td data-field="salary">₹85,000</td>
+          <td data-field="id">103</td>
+          <td data-field="name">Gamma Retail</td>
+          <td data-field="role">Distributor</td>
+          <td data-field="city">Chennai</td>
+          <td data-field="salary">₹1,10,000</td>
           <td><button type="button" class="btn-action btn-read-row">Read Row</button></td>
         </tr>
       </tbody>
       <tfoot>
         <tr>
           <td data-field="summaryLabel">Totals:</td>
-          <td data-field="totalHeadcount">3 Employees</td>
+          <td data-field="totalRecords">3 Enterprises</td>
           <td>-</td>
-          <td data-field="totalPayroll">₹3,00,000</td>
+          <td>-</td>
+          <td data-field="totalPayroll">₹3,50,000</td>
           <td><button type="button" class="btn-action btn-footer" id="btnReadFooter">Read Footer</button></td>
         </tr>
       </tfoot>
@@ -211,6 +203,6 @@
     </div>
   </div>
 
-  <script type="module" src="./main-table.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>

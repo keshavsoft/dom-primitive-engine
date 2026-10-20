@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DOM Primitive Engine V7 — Form Sample</title>
+  <title>V8 — Form Primitive Extraction</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -20,27 +20,24 @@
     .card {
       background: #ffffff;
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       padding: 32px;
       border-radius: 12px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
       border: 1px solid #e2e8f0;
     }
-    .nav-links {
+    .nav-bar {
       display: flex;
       gap: 12px;
       margin-bottom: 20px;
-    }
-    .nav-links a {
       font-size: 0.85rem;
+    }
+    .nav-bar a {
       color: #2563eb;
       text-decoration: none;
       font-weight: 600;
     }
-    .nav-links a.active {
-      color: #0f172a;
-      text-decoration: underline;
-    }
+    .nav-bar a:hover { text-decoration: underline; }
     .badge {
       display: inline-block;
       padding: 4px 10px;
@@ -54,7 +51,7 @@
       margin-bottom: 12px;
     }
     h1 {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: #1e293b;
       margin-bottom: 6px;
@@ -79,16 +76,17 @@
       font-weight: 600;
       color: #334155;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 10px 14px;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       font-size: 0.95rem;
       color: #1e293b;
+      background: #ffffff;
       transition: border-color 0.15s ease;
     }
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: #2563eb;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
@@ -105,9 +103,7 @@
       margin-top: 6px;
       transition: background 0.15s ease;
     }
-    button[type="submit"]:hover {
-      background: #1d4ed8;
-    }
+    button[type="submit"]:hover { background: #1d4ed8; }
     .output-section {
       margin-top: 24px;
       border-top: 1px solid #e2e8f0;
@@ -135,25 +131,34 @@
 </head>
 <body>
   <div class="card">
-    <div class="nav-links">
-      <a href="./form.html" class="active">Form Sample</a>
+    <div class="nav-bar">
+      <a href="../index.html">← V8 Dashboard</a>
       <span>•</span>
-      <a href="./table.html">Table & Footer Sample →</a>
+      <a href="../table/index.html">Go to Table Sample →</a>
     </div>
 
-    <span class="badge">V7 Pipeline</span>
-    <h1>Form Extraction</h1>
-    <p class="subtitle">Extracts Name & Mobile into an object on button click</p>
+    <span class="badge">V8 Separate Module</span>
+    <h1>Form Sample</h1>
+    <p class="subtitle">Extracts form fields via declarative JSON recipe pipeline</p>
 
-    <form id="v7Form" onsubmit="return false;">
+    <form id="v8UserForm" onsubmit="return false;">
       <div class="field">
-        <label for="nameInput">Name</label>
-        <input id="nameInput" name="name" type="text" placeholder="Enter name" value="Keshav" required>
+        <label for="fieldName">Name</label>
+        <input id="fieldName" name="name" type="text" placeholder="Enter name" value="Keshav" required>
       </div>
 
       <div class="field">
-        <label for="mobileInput">Mobile Number</label>
-        <input id="mobileInput" name="mobile" type="tel" placeholder="Enter mobile" value="9876543210" required>
+        <label for="fieldMobile">Mobile Number</label>
+        <input id="fieldMobile" name="mobile" type="tel" placeholder="Enter mobile" value="9876543210" required>
+      </div>
+
+      <div class="field">
+        <label for="fieldCity">City</label>
+        <select id="fieldCity" name="city">
+          <option value="Hyderabad" selected>Hyderabad</option>
+          <option value="Bengaluru">Bengaluru</option>
+          <option value="Chennai">Chennai</option>
+        </select>
       </div>
 
       <button type="submit" id="submitBtn">Submit</button>
@@ -161,10 +166,10 @@
 
     <div class="output-section">
       <div class="output-label">Extracted Form Object (Console & DOM)</div>
-      <pre id="outputResult">// Click Submit to extract form data</pre>
+      <pre id="outputResult">// Click "Submit" to extract form data</pre>
     </div>
   </div>
 
-  <script type="module" src="./main-form.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
