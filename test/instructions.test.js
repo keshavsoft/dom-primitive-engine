@@ -1,5 +1,6 @@
-import test from "node:test";import assert from "node:assert/strict";import {readControlValue,controlsToObject} from "../src/primitives/read.js";import {instructionOperations} from "../src/runInstructions.js";
+import test from "node:test";import assert from "node:assert/strict";import {readControlValue,controlsToObject} from "../src/primitives/read.js";import {instructionOperations} from "../src/runInstructions.js";import {instructionOperations as instructionOperationsV1} from "../src/V1/runInstructions.js";import {instructionOperations as instructionOperationsV2} from "../src/V2/runInstructions.js";
 test("instruction operations include core find and extraction",()=>{for(const op of ["closest","queryOne","queryAll","controlsToObject"])assert.ok(instructionOperations.includes(op))});
+test("V1 and V2 modules are available under the documented import paths",()=>{assert.deepEqual(instructionOperationsV1, instructionOperations);assert.deepEqual(instructionOperationsV2, instructionOperations);});
 test("reads value-like control",()=>assert.equal(readControlValue({value:"hello",tagName:"INPUT",type:"text"}),"hello"));
 test("checkbox state",()=>{assert.equal(readControlValue({value:"yes",checked:true,tagName:"INPUT",type:"checkbox"}),"yes");assert.equal(readControlValue({value:"yes",checked:false,tagName:"INPUT",type:"checkbox"}),false)});
 test("maps named controls",()=>assert.deepEqual(controlsToObject([{name:"name",value:"Maya",tagName:"INPUT",type:"text"}]),{name:"Maya"}));
