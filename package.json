@@ -1,9 +1,15 @@
 {
-    "name": "dom-primitive-engine",
-    "version": "0.1.0",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "test": "node --test"
-    }
+  "name": "dom-primitive-engine",
+  "version": "1.2.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1"
+  }
 }
