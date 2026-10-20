@@ -1,15 +1,22 @@
 {
   "name": "dom-primitive-engine",
-  "version": "1.2.1",
-  "private": true,
+  "version": "1.3.0",
+  "description": "Small instruction-driven DOM extraction primitives for browser applications",
   "type": "module",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./primitives/find": "./src/V3/primitives/find.js",
+    "./primitives/read": "./src/V3/primitives/read.js",
+    "./primitives/navigate": "./src/V3/primitives/navigate.js"
+  },
+  "files": ["src/index.js", "src/V3", "README.md", "LICENSE"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test"
   },
-  "devDependencies": {
-    "vite": "^6.4.1"
-  }
+  "devDependencies": { "vite": "^6.4.1" }
 }
