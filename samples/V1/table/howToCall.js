@@ -1,4 +1,4 @@
-import {runInstructions} from "../../../src/V1/runInstructions.js";
+import {runInstructions} from "../../../archive/v1/runInstructions.js";
 import {collectRowInstructions,rowCellsInstructions,clickedCellInstructions} from "./instructions.js";
 export const collectRow=event=>runInstructions({start:event.currentTarget,instructions:collectRowInstructions}).data;
 export const readRowCells=event=>Array.from(runInstructions({start:event.currentTarget,instructions:rowCellsInstructions}).cells,c=>c.textContent.trim());

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOM Primitive Engine V7 — Table & Footer Sample</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 20px;
+    }
+    .container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 720px;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+    }
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav-links a.active {
+      color: #0f172a;
+      text-decoration: underline;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #eff6ff;
+      color: #2563eb;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+    tfoot {
+      background: #f8fafc;
+      font-weight: 600;
+      border-top: 2px solid #cbd5e1;
+    }
+    tfoot td {
+      border-bottom: none;
+    }
+    .btn-action {
+      padding: 6px 12px;
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-action:hover {
+      background: #1d4ed8;
+    }
+    .btn-footer {
+      background: #0f172a;
+    }
+    .btn-footer:hover {
+      background: #1e293b;
+    }
+    .outputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .output-card {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 12px;
+    }
+    .output-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    pre {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-links">
+      <a href="./form.html">← Form Sample</a>
+      <span>•</span>
+      <a href="./table.html" class="active">Table & Footer Sample</a>
+    </div>
+
+    <span class="badge">V7 Dynamic Pipeline</span>
+    <h1>Table & Footer Extraction</h1>
+    <p class="subtitle">Extracts individual row TD content or table footer summaries via JSON recipes</p>
+
+    <table id="employeesTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Salary</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-field="id">EMP-01</td>
+          <td data-field="name">Keshav</td>
+          <td data-field="role">Lead Architect</td>
+          <td data-field="salary">₹1,20,000</td>
+          <td><button type="button" class="btn-action btn-read-row">Read Row</button></td>
+        </tr>
+        <tr>
+          <td data-field="id">EMP-02</td>
+          <td data-field="name">Maya</td>
+          <td data-field="role">Senior UI Engineer</td>
+          <td data-field="salary">₹95,000</td>
+          <td><button type="button" class="btn-action btn-read-row">Read Row</button></td>
+        </tr>
+        <tr>
+          <td data-field="id">EMP-03</td>
+          <td data-field="name">Suresh</td>
+          <td data-field="role">Product Designer</td>
+          <td data-field="salary">₹85,000</td>
+          <td><button type="button" class="btn-action btn-read-row">Read Row</button></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td data-field="summaryLabel">Totals:</td>
+          <td data-field="totalHeadcount">3 Employees</td>
+          <td>-</td>
+          <td data-field="totalPayroll">₹3,00,000</td>
+          <td><button type="button" class="btn-action btn-footer" id="btnReadFooter">Read Footer</button></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="outputs-grid">
+      <div class="output-card">
+        <div class="output-label">Row Output (Console & DOM)</div>
+        <pre id="rowOutput">// Click "Read Row" on any row</pre>
+      </div>
+      <div class="output-card">
+        <div class="output-label">Footer Output (Console & DOM)</div>
+        <pre id="footerOutput">// Click "Read Footer"</pre>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./main-table.js"></script>
+</body>
+</html>

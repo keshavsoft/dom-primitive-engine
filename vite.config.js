@@ -14,7 +14,9 @@ export default defineConfig({
         'V2/form': resolve(__dirname, 'samples/V2/form.html'),
         'V2/table': resolve(__dirname, 'samples/V2/table.html'),
         'V5/form': resolve(__dirname, 'samples/v5/form.html'),
-        'V6/form': resolve(__dirname, 'samples/v6/form.html')
+        'V6/form': resolve(__dirname, 'samples/v6/form.html'),
+        'V7/form': resolve(__dirname, 'samples/v7/form.html'),
+        'V7/table': resolve(__dirname, 'samples/v7/table.html')
       }
     }
   }

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOM Primitive Engine V7 — Samples Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      padding: 36px 32px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #eff6ff;
+      color: #2563eb;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #64748b;
+      font-size: 0.925rem;
+      margin-bottom: 28px;
+    }
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .menu a {
+      display: block;
+      padding: 14px 20px;
+      background: #f1f5f9;
+      color: #1e293b;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid #cbd5e1;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .menu a:hover {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+      transform: translateY(-1px);
+    }
+    .menu a span {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: normal;
+      opacity: 0.8;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge">V7 Dynamic Engine</span>
+    <h1>DOM Primitive Engine</h1>
+    <p>Pure primitives + declarative JSON recipe pipelines</p>
+
+    <div class="menu">
+      <a href="./form.html">
+        📝 Form Sample
+        <span>Extract Name & Mobile Number via form recipe</span>
+      </a>
+      <a href="./table.html">
+        📊 Table & Footer Sample
+        <span>Extract individual row TDs and footer totals via table recipes</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

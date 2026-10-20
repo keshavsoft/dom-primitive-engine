@@ -1,4 +1,4 @@
-import { runInstructions } from '../../src/V2/runInstructions.js';
+import { runInstructions } from '../../archive/v2/runInstructions.js';
 import formConfig from './form-instructions.json';
 import tableConfig from './table-instructions.json';
 
