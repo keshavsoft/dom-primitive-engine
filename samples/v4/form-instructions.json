@@ -1,0 +1,12 @@
+{
+  "collectFormInstructions": [
+    { "op": "closest", "from": "start", "selector": "form", "saveAs": "form", "required": true },
+    { "op": "queryAll", "from": "form", "selector": "input,select,textarea", "saveAs": "controls" },
+    { "op": "controlsToObject", "from": "controls", "saveAs": "data" }
+  ],
+  "emailInstructions": [
+    { "op": "closest", "from": "start", "selector": "form", "saveAs": "form", "required": true },
+    { "op": "queryOne", "from": "form", "selector": "[name=\"email\"]", "saveAs": "field", "required": true },
+    { "op": "readControlValue", "from": "field", "saveAs": "value" }
+  ]
+}
