@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Primitive Engine V9 — Table Extraction Story</title>
+    <style>
+        :root {
+            font-family: Arial, sans-serif;
+            color: #243044;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 28px 20px 60px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.25;
+        }
+
+        h1 {
+            color: #173b68;
+        }
+
+        h2 {
+            margin-top: 34px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #d7deea;
+        }
+
+        .intro,
+        .note {
+            padding: 16px;
+            border-radius: 8px;
+            background: #eaf1fb;
+        }
+
+        .step {
+            margin: 14px 0;
+            padding: 16px;
+            background: white;
+            border: 1px solid #dce3ed;
+            border-radius: 8px;
+        }
+
+        .step-number {
+            color: #1769aa;
+            font-weight: bold;
+        }
+
+        code,
+        pre {
+            font-family: Consolas, monospace;
+        }
+
+        code {
+            background: #edf1f6;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre {
+            padding: 16px;
+            overflow-x: auto;
+            background: #172333;
+            color: #edf4ff;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        .term {
+            font-weight: bold;
+            color: #174f87;
+        }
+
+        .output {
+            border-left: 4px solid #26835b;
+            padding: 12px 16px;
+            background: #eaf7ef;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #dce3ed;
+        }
+
+        th {
+            background: #eaf1fb;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #657186;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>DOM Primitive Engine V9</h1>
+        <p><strong>Example:</strong> Extract one table row into a JavaScript object.</p>
+    </header>
+
+    <section class="intro">
+        <strong>The central idea</strong>
+        <p>
+            The application knows when the user clicks a button.
+            The instruction contract describes how to find the relevant DOM elements
+            and read their values. The engine executes those instructions in order.
+            The result is ordinary JavaScript data.
+        </p>
+    </section>
+
+    <h2>1. The table we want to read</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Keyboard</td>
+                <td>Accessories</td>
+                <td>35</td>
+                <td><button type="button">Extract</button></td>
+            </tr>
+            <tr>
+                <td>Mouse</td>
+                <td>Accessories</td>
+                <td>20</td>
+                <td><button type="button">Extract</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        Each row represents one item. When the user clicks <code>Extract</code>,
+        we want the data from that row only—not from every row in the table.
+    </p>
+
+    <h2>2. Follow the click, step by step</h2>
+
+    <section class="step">
+        <p class="step-number">STEP 1 — Receive the click</p>
+        <p>
+            The application attaches a click listener to the table.
+            The clicked button is available through
+            <code>event.target</code> or, when using a delegated listener,
+            <code>event.currentTarget</code> depending on how the listener is wired.
+            The example must use the property that matches its actual event handler.
+        </p>
+        <p>
+            The application passes the clicked element to the extraction pipeline.
+            The pipeline does not decide which button the user clicked.
+        </p>
+    </section>
+
+    <section class="step">
+        <p class="step-number">STEP 2 — Find the containing row</p>
+        <p>
+            Starting from the clicked button, use <code>closest("tr")</code>
+            to locate the row that contains it.
+        </p>
+        <pre>button → closest("tr") → selected row</pre>
+        <p>
+            This is important because the same instructions can work for either
+            the Keyboard row or the Mouse row. The starting element determines
+            which row is selected.
+        </p>
+    </section>
+
+    <section class="step">
+        <p class="step-number">STEP 3 — Read the row's cells</p>
+        <p>
+            Within the selected row, use <code>querySelectorAll("td")</code>
+            to collect its data cells.
+        </p>
+        <pre>selected row → querySelectorAll("td") → cell collection</pre>
+        <p>
+            The Action cell is also a <code>td</code>, so the column mapping must
+            deliberately describe the three data columns we want to extract.
+        </p>
+    </section>
+
+    <section class="step">
+        <p class="step-number">STEP 4 — Convert cells into an object</p>
+        <p>
+            The column configuration supplies the property names.
+            The engine reads each configured cell and pairs its value with the
+            corresponding property name.
+        </p>
+        <pre>{
+  "columns": ["itemName", "category", "price"],
+  "read": "text"
+}</pre>
+        <p>
+            In this example, <code>columns</code> is an ordered mapping:
+            the first data cell becomes <code>itemName</code>, the second becomes
+            <code>category</code>, and the third becomes <code>price</code>.
+        </p>
+    </section>
+
+    <h2>3. The pipeline's responsibility</h2>
+
+    <p>
+        Conceptually, the instructions form an ordered sequence:
+    </p>
+
+    <pre>[
+  { "op": "closest", "args": { "selector": "tr" } },
+  { "op": "queryAll", "args": { "selector": "td" } },
+  {
+    "op": "toObject",
+    "args": {
+      "columns": ["itemName", "category", "price"],
+      "read": "text"
+    }
+  }
+]</pre>
+
+    <p>
+        Each operation receives the result of the preceding operation.
+        The engine executes the operations in sequence and returns the last
+        operation's result.
+    </p>
+
+    <div class="note">
+        <strong>Contract decision to review</strong>
+        <p>
+            This example uses the current short property names,
+            <code>op</code> and <code>args</code>. If we decide to use
+            <code>operation</code> and <code>arguments</code> instead, we must
+            update the engine, examples, tests, and documentation together.
+            The document should describe whichever contract we actually adopt.
+        </p>
+    </div>
+
+    <h2>4. Expected result</h2>
+
+    <p>If the user clicks Extract in the Keyboard row, the output should be:</p>
+
+    <div class="output">
+        <pre>{
+  "itemName": "Keyboard",
+  "category": "Accessories",
+  "price": "35"
+}</pre>
+    </div>
+
+    <p>
+        If the user clicks Extract in the Mouse row, the same instructions should
+        return that row's values instead.
+    </p>
+
+    <h2>5. Who is responsible for what?</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Part</th>
+                <th>Responsibility</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Click handler</td>
+                <td>Detects the user's action and supplies the starting element.</td>
+            </tr>
+            <tr>
+                <td>Instruction contract</td>
+                <td>Describes the operations and the information each operation needs.</td>
+            </tr>
+            <tr>
+                <td>Pipeline</td>
+                <td>Executes instructions in order and passes results forward.</td>
+            </tr>
+            <tr>
+                <td>DOM primitives</td>
+                <td>Perform the actual DOM lookup and value-reading work.</td>
+            </tr>
+            <tr>
+                <td>Column mapping</td>
+                <td>Defines the property names and their corresponding cell positions.</td>
+            </tr>
+            <tr>
+                <td>Output</td>
+                <td>Returns a plain JavaScript object that application code can use.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>6. The design principle</h2>
+
+    <p>
+        The application handles the event. The instructions describe the extraction.
+        The engine executes the instructions. The result is data.
+    </p>
+
+    <p>
+        Keeping those responsibilities separate makes the same extraction engine
+        reusable for other tables and, with an appropriate instruction contract,
+        for forms and other DOM structures.
+    </p>
+
+    <footer>
+        Draft for discussion — DOM Primitive Engine V9.
+        Confirm the instruction contract and actual example wiring against the
+        implementation before treating this document as final API documentation.
+    </footer>
+</body>
+
+</html>
