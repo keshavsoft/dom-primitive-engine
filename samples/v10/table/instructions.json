@@ -1,0 +1,23 @@
+[
+  {
+    "narration": "Find the table row containing the clicked element.",
+    "sourcePath": { "fileName": "root" },
+    "func": "closest",
+    "arguments": { "selector": "tr" }
+  },
+  {
+    "narration": "Collect the data cells from the selected row.",
+    "sourcePath": { "fileName": "previous" },
+    "func": "querySelectorAll",
+    "arguments": { "selector": "td:not(:last-child)" }
+  },
+  {
+    "narration": "Map the collected cell values to the configured object keys.",
+    "sourcePath": { "fileName": "previous" },
+    "func": "mapValues",
+    "arguments": {
+      "columns": ["itemName", "category", "price"],
+      "read": "text"
+    }
+  }
+]

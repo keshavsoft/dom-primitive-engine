@@ -1,6 +1,6 @@
 {
   "name": "dom-primitive-engine",
-  "version": "1.9.1",
+  "version": "1.10.1",
   "description": "Browser-side DOM primitives with JSON-driven instructions",
   "type": "module",
   "license": "MIT",
