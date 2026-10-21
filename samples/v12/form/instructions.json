@@ -1,0 +1,20 @@
+[
+  {
+    "narration": "Find the form containing the submitted element.",
+    "sourcePath": { "fileName": "root" },
+    "func": "closest",
+    "arguments": { "selector": "form" }
+  },
+  {
+    "narration": "Collect the named form controls.",
+    "sourcePath": { "fileName": "previous" },
+    "func": "querySelectorAll",
+    "arguments": { "selector": "input[name], select[name], textarea[name]" }
+  },
+  {
+    "narration": "Map each control value using its name as the object key.",
+    "sourcePath": { "fileName": "previous" },
+    "func": "mapNamedValues",
+    "arguments": {}
+  }
+]
