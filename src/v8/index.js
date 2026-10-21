@@ -4,6 +4,6 @@ export { readControlValue, readText, collectionToObject, collectionToArray } fro
 
 export const meta = Object.freeze({
   name: 'DOM Primitive Engine',
-  version: 'V7',
+  version: 'V8.0.0',
   type: 'Dynamic Pipeline'
 });
