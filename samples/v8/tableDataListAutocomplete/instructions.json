@@ -1,0 +1,12 @@
+{
+  "rowRecipe": {
+    "closest": "tr",
+    "queryAll": "td[data-field]",
+    "loop": "toObject"
+  },
+  "footerRecipe": {
+    "closest": "tfoot",
+    "queryAll": "input[name]",
+    "loop": "toObject"
+  }
+}
