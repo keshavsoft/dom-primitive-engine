@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>V11 — Table row extraction</title>
+  <style>
+    body {
+      font: 16px system-ui, sans-serif;
+      max-width: 850px;
+      margin: 32px auto;
+      padding: 0 16px;
+      color: #172033
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 16px 0
+    }
+
+    th,
+    td {
+      border: 1px solid #d5dbe5;
+      padding: 10px;
+      text-align: left
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #f4f6f9;
+      padding: 14px;
+      border-radius: 8px
+    }
+  </style>
+
+  <base href="/samples/v10/table/">
+</head>
+
+<body>
+  <p><a href="../index.html">All V11 examples</a></p>
+  <h1>Table row extraction</h1>
+  <p>Click a row's button. The column keys are supplied by the extraction contract, not stored on every cell.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Keyboard</td>
+        <td>Accessories</td>
+        <td>35</td>
+        <td><button type="button" data-extract-row>Extract row</button></td>
+      </tr>
+      <tr>
+        <td>Mouse</td>
+        <td>Accessories</td>
+        <td>20</td>
+        <td><button type="button" data-extract-row>Extract row</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>Extracted object</h2>
+  <pre id="output">Choose a row.</pre>
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>

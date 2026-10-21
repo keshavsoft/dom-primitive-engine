@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>V11 — Form value extraction</title>
+  <style>
+    body {
+      font: 16px system-ui, sans-serif;
+      max-width: 850px;
+      margin: 32px auto;
+      padding: 0 16px;
+      color: #172033
+    }
+
+    label {
+      display: block;
+      margin: 12px 0
+    }
+
+    input {
+      padding: 8px;
+      min-width: 240px
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #f4f6f9;
+      padding: 14px;
+      border-radius: 8px
+    }
+  </style>
+
+  <base href="/samples/v10/form/">
+</head>
+
+<body>
+  <p><a href="../index.html">All V11 examples</a></p>
+  <h1>Form value extraction</h1>
+  <p>The form's named controls provide their own object keys.</p>
+  <form id="person-form">
+    <label>Name <input name="name" value="Keshav"></label>
+    <label>City <input name="city" value="Kakinada"></label>
+    <button type="submit">Extract form</button>
+  </form>
+  <h2>Extracted object</h2>
+  <pre id="output">Submit the form.</pre>
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
