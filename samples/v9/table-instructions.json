@@ -1,0 +1,25 @@
+[
+  {
+    "op": "closest",
+    "args": {
+      "selector": "tr"
+    }
+  },
+  {
+    "op": "queryAll",
+    "args": {
+      "selector": "td"
+    }
+  },
+  {
+    "op": "toObject",
+    "args": {
+      "columns": [
+        "itemName",
+        "category",
+        "price"
+      ],
+      "read": "text"
+    }
+  }
+]
