@@ -1,5 +1,5 @@
 const k = {
-  version: "1.15.0",
+  version: "1.16.0",
   name: "dom-primitive-engine"
 }, A = (e, o, t = k) => {
   if (!(!e || typeof globalThis > "u"))
@@ -86,7 +86,39 @@ const k = {
     });
   }
   return n;
-}, L = (e, o = []) => {
+}, h = (e) => {
+  const o = (e == null ? void 0 : e.target) ?? (e == null ? void 0 : e.currentTarget) ?? e;
+  if (!o) throw new TypeError("A DOM element or event is required");
+  return o;
+}, b = (e) => (Array.isArray(e) ? e : (e == null ? void 0 : e.columns) ?? []).map((t) => typeof t == "string" ? t : (t == null ? void 0 : t.columnName) ?? (t == null ? void 0 : t.name) ?? (t == null ? void 0 : t.key)), L = [
+  {
+    sourcePath: { fileName: "root" },
+    func: "closest",
+    arguments: { selector: "tr" }
+  },
+  {
+    sourcePath: { fileName: "previous" },
+    func: "querySelectorAll",
+    arguments: { selector: "td:not(:last-child)" }
+  }
+], z = [
+  {
+    sourcePath: { fileName: "root" },
+    func: "closest",
+    arguments: { selector: "tfoot" }
+  },
+  {
+    sourcePath: { fileName: "previous" },
+    func: "querySelectorAll",
+    arguments: { selector: "input, select, textarea" }
+  }
+], F = (e, o = []) => {
+  const t = m(h(e), L);
+  return p(t, { columns: b(o), read: "text" });
+}, G = (e, o = []) => {
+  const t = m(h(e), z);
+  return Array.from(t).some((n) => n.name) ? v(t) : p(t, { columns: b(o), read: "value" });
+}, R = (e, o = []) => {
   const t = typeof e == "string" ? document.getElementById(e) || document.querySelector(e) : e;
   if (!t)
     return console.warn(`[dom-primitive-engine] bindEvents: Container not found for "${e}"`), null;
@@ -107,48 +139,16 @@ const k = {
           ...i.clientData,
           event: s,
           targetElement: f
-        }, d = m(E, i.instructions, S);
+        }, d = (i.runner ?? m)(E, i.instructions, S);
         d != null && typeof i.onExtract == "function" && i.onExtract(d, s, f);
       }
     });
   return t;
-}, h = (e) => {
-  const o = (e == null ? void 0 : e.target) ?? (e == null ? void 0 : e.currentTarget) ?? e;
-  if (!o) throw new TypeError("A DOM element or event is required");
-  return o;
-}, b = (e) => (Array.isArray(e) ? e : (e == null ? void 0 : e.columns) ?? []).map((t) => typeof t == "string" ? t : (t == null ? void 0 : t.columnName) ?? (t == null ? void 0 : t.name) ?? (t == null ? void 0 : t.key)), z = [
-  {
-    sourcePath: { fileName: "root" },
-    func: "closest",
-    arguments: { selector: "tr" }
-  },
-  {
-    sourcePath: { fileName: "previous" },
-    func: "querySelectorAll",
-    arguments: { selector: "td:not(:last-child)" }
-  }
-], R = [
-  {
-    sourcePath: { fileName: "root" },
-    func: "closest",
-    arguments: { selector: "tfoot" }
-  },
-  {
-    sourcePath: { fileName: "previous" },
-    func: "querySelectorAll",
-    arguments: { selector: "input, select, textarea" }
-  }
-], V = (e, o = []) => {
-  const t = m(h(e), z);
-  return p(t, { columns: b(o), read: "text" });
-}, F = (e, o = []) => {
-  const t = m(h(e), R);
-  return Array.from(t).some((n) => n.name) ? v(t) : p(t, { columns: b(o), read: "value" });
 };
-A(m, L);
+A(m, R);
 export {
-  L as bindEvents,
-  F as readFooter,
-  V as readRow,
+  R as bindEvents,
+  G as readFooter,
+  F as readRow,
   m as runInstructions
 };

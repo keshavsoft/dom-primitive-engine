@@ -1,4 +1,4 @@
-import runInstructions from "../runInstructions.js";
+import runInstructions from "../extraction/index.js";
 
 /**
  * Attaches instruction-driven delegated event listeners to a container.
@@ -45,7 +45,8 @@ export const bindEvents = (containerOrId, bindings = []) => {
           targetElement: matchElement
         };
 
-        const result = runInstructions(startInput, binding.instructions, clientData);
+        const runner = binding.runner ?? runInstructions;
+        const result = runner(startInput, binding.instructions, clientData);
 
         if (result !== null && result !== undefined && typeof binding.onExtract === "function") {
           binding.onExtract(result, event, matchElement);

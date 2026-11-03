@@ -1,0 +1,19 @@
+[
+  {
+    "narration": "Guard: Check if Enter key was pressed",
+    "sourcePath": { "fileName": "root" },
+    "func": "isKey",
+    "arguments": { "key": "Enter" }
+  },
+  {
+    "narration": "Read value from the search input",
+    "sourcePath": { "fileName": "previous" },
+    "func": "readValue"
+  },
+  {
+    "narration": "Execute outside function to package the search object",
+    "sourcePath": { "fileName": "previous" },
+    "func": "onSearch"
+  }
+]
+

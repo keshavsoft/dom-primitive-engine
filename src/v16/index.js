@@ -1,8 +1,8 @@
 import registerGlobal from "./register/index.js";
-import { default as runInstructions } from "./runInstructions.js";
+import { runInstructions, readRow, readFooter } from "./extraction/index.js";
 import { default as bindEvents } from "./bindEvents/index.js";
 
-export { runInstructions, bindEvents };
-export { readRow, readFooter } from "./tableReaders.js";
+export { runInstructions, readRow, readFooter };
+export { bindEvents };
 
 registerGlobal(runInstructions, bindEvents);
