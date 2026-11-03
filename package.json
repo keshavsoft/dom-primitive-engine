@@ -1,6 +1,6 @@
 {
   "name": "dom-primitive-engine",
-  "version": "1.13.2",
+  "version": "1.14.1",
   "description": "Browser-side DOM primitives with JSON-driven instructions",
   "type": "module",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "files": [
     "src/index.js",
-    "src/v13",
+    "src/v14",
     "docs",
     "README.md",
     "LICENSE"

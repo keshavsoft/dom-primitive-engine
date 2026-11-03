@@ -1,4 +1,5 @@
 import { extractRow } from "./extractRow.js";
+import { extractSearch } from "./extractSearch.js";
 
 // Single common source of data and columns
 import data from "../common/data.json" with { type: "json" };
@@ -7,7 +8,7 @@ import columns from "../common/columns.json" with { type: "json" };
 const container = document.getElementById("dom-render-container");
 
 const attachEvents = () => {
-
+    // 1. Table row show buttons
     const buttons = document.querySelectorAll(".ks-btn-show");
     console.log("buttons : ", buttons);
 
@@ -19,6 +20,19 @@ const attachEvents = () => {
         });
     });
 
+    // 2. Search input Enter keydown
+    const searchInput = container.querySelector("input") || document.querySelector("input[type='search']");
+    console.log("searchInput : ", searchInput);
+
+    if (searchInput) {
+        searchInput.addEventListener("keydown", (event) => {
+            const searchData = extractSearch(event);
+
+            if (searchData) {
+                console.log("searchData : ", searchData);
+            }
+        });
+    }
 };
 
 const start = () => {

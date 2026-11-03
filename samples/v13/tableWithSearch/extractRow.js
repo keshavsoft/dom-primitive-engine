@@ -1,7 +1,7 @@
 import instructions from "./instructions.json" with { type: "json" };
 
 const clientData = {
-  columns: ["itemName", "category", "price"],
+  columns: ["serial", "itemName", "category", "baseUnit", "openingRate"],
   options: {}
 };
 
