@@ -1,4 +1,3 @@
-import "https://keshavsoft.github.io/json-renderers/dist/v22/min.js";
 import { extractRow } from "./extractRow.js";
 
 // Single common source of data and columns

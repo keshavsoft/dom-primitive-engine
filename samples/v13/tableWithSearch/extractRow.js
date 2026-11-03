@@ -1,6 +1,3 @@
-import "https://keshavsoft.github.io/dom-primitive-engine/dist/v13/min.js";
-
-// import { runInstructions } from "../../../../src/index.js";
 import instructions from "./instructions.json" with { type: "json" };
 
 const clientData = {
