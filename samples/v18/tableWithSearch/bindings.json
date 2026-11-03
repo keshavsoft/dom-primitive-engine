@@ -1,0 +1,10 @@
+[
+  {
+    "event": "click",
+    "selector": ".ks-btn-show"
+  },
+  {
+    "event": "keydown",
+    "selector": "input[type='search'], input"
+  }
+]

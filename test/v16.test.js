@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { runInstructions as runExtraction } from "../src/v17/extraction/index.js";
 import { bindEvents } from "../src/v17/bindEvents/index.js";
-import { runInstructions, bindEvents as topBindEvents } from "../src/index.js";
+import { runInstructions, bindEvents as topBindEvents } from "../src/v16/index.js";
 
 test("v16: extraction/ is 100% self-contained and operates without bindEvents", () => {
   const mockButton = {

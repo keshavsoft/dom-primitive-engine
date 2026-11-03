@@ -1,7 +1,37 @@
 # DOM Primitive Engine
 
 > **Browser-native, declarative, instruction-driven DOM extraction engine.**  
-> Zero dependencies. Built purely on standard Web APIs. Single source of truth: `v13`.
+> Zero dependencies. Built purely on standard Web APIs. Single source of truth: `v18`.
+
+---
+
+## 🤝 Pairing with `dom-primitive-bindings`
+
+In **v18**, event delegation is fully decoupled into its sibling package, **`dom-primitive-bindings`**:
+
+1. **The Wiring Layer (`dom-primitive-bindings`)**:
+   Attaches a single listener to the parent container using declarative `bindings.json` and intercepts bubbling events.
+2. **The Extraction Layer (`dom-primitive-engine`)**:
+   Takes the matched target element and executes `instructions.json` pipelines to extract clean, typed JSON data.
+
+```text
+[ User clicks button in Table ]
+               │
+               ▼
+┌───────────────────────────────────────────────┐
+│ dom-primitive-bindings (The Trigger / Wiring) │
+│  • Single container listener                  │
+│  • Matches target element via closest()       │
+└──────────────────────┬────────────────────────┘
+                       │ delivers matchElement
+                       ▼
+┌───────────────────────────────────────────────┐
+│ dom-primitive-engine (The Traversal / Extract)│
+│  • Runs instructions.json                     │
+│  • Traverses DOM: tr ➔ td:not(:last-child)    │
+│  • Returns clean { itemName, category, rate } │
+└───────────────────────────────────────────────┘
+```
 
 ---
 

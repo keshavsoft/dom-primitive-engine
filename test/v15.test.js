@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { runInstructions, readRow, bindEvents } from "../src/index.js";
+import { runInstructions, readRow, bindEvents } from "../src/v15/index.js";
 
 test("v15: bindEvents wires delegated click and keydown directly to container", () => {
   const listeners = {};

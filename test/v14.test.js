@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { runInstructions, readRow, bindEvents } from "../src/index.js";
+import { runInstructions, readRow, bindEvents } from "../src/v14/index.js";
 import querySelector from "../src/v14/find/querySelector.js";
 import isKey from "../src/v14/events/isKey.js";
 

@@ -5,7 +5,7 @@ import groupBindings from "../src/v17/bindEvents/groupBindings.js";
 import getStartInput from "../src/v17/bindEvents/getStartInput.js";
 import getClientData from "../src/v17/bindEvents/getClientData.js";
 import executeBinding from "../src/v17/bindEvents/executeBinding.js";
-import { bindEvents } from "../src/index.js";
+import { bindEvents } from "../src/v17/index.js";
 
 test("v17: getContainer resolves element or returns null", () => {
   const mockEl = { id: "test" };
