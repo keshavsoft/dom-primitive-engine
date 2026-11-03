@@ -16,3 +16,4 @@ export const registerGlobal = (runInstructions, { readRow, readFooter } = {}, me
 };
 
 export default registerGlobal;
+

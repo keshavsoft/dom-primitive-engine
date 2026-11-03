@@ -5,3 +5,4 @@ export { runInstructions, readRow, readFooter };
 export default runInstructions;
 
 registerGlobal(runInstructions, { readRow, readFooter });
+
