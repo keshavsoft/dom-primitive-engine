@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 2: The Pipeline Epiphany — DOM Primitive Engine</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #334155;
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+    }
+    .story-hero {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #fff;
+      padding: 40px 0;
+    }
+    pre {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    code:not(pre code) {
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    .concept-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #ffffff;
+    }
+    .flow-step {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="story-hero shadow-sm mb-4">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <span class="badge bg-light text-primary mb-2">Chapter 2 of 4</span>
+          <h1 class="h3 fw-bold mb-1">The Epiphany: Separating the Event from the Journey</h1>
+          <p class="text-sky-100 small mb-0">Why the click handler should never know about your table's layout.</p>
+        </div>
+        <a href="../index.html" class="btn btn-outline-light btn-sm">
+          <i class="bi bi-arrow-left me-1"></i> Story Index
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5" style="max-width: 900px;">
+
+    <!-- The Epiphany -->
+    <section class="card shadow-sm border-0 p-4 mb-4">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-lightbulb-fill text-warning me-2"></i> 1. The Core Realization
+      </h2>
+      <p>
+        In Chapter 1, we saw how fragile code becomes when event handlers perform DOM scraping directly.
+      </p>
+      <div class="alert alert-primary border-0 p-3 mb-3">
+        <strong>The Epiphany:</strong><br>
+        An event listener should have exactly <strong>one</strong> job: detect the user's action and hand off the starting element (<code>event.currentTarget</code>). It should <strong>never</strong> know how many columns exist, where the row starts, or how cells are read.
+      </div>
+      <p class="mb-0">
+        If you separate the <strong>Trigger</strong> from the <strong>Extraction Journey</strong>, you can change your table layout at any time without ever touching your JavaScript event listener again.
+      </p>
+    </section>
+
+    <!-- The 3-Stage Pipeline Model -->
+    <section class="card shadow-sm border-0 p-4 mb-4">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-diagram-3-fill text-primary me-2"></i> 2. The 3-Stage Mental Model
+      </h2>
+      <p>
+        Instead of a mess of parent-child traversals, every data extraction from a table can be broken down into three clean, linear stages:
+      </p>
+
+      <div class="d-flex flex-wrap gap-3 align-items-stretch mb-4">
+        <!-- Stage 1 -->
+        <div class="flow-step">
+          <div class="badge bg-primary mb-2">Stage 1: Anchor</div>
+          <h5 class="h6 fw-bold mb-1">Ascend to Boundary</h5>
+          <p class="small text-muted mb-0">
+            From the clicked element, climb up to establish the container scope (the row <code>&lt;tr&gt;</code>).
+          </p>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="flow-step">
+          <div class="badge bg-info text-dark mb-2">Stage 2: Filter</div>
+          <h5 class="h6 fw-bold mb-1">Drill Down to Payload</h5>
+          <p class="small text-muted mb-0">
+            Inside that row, query only the cells holding actual data, ignoring buttons and serial numbers.
+          </p>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="flow-step">
+          <div class="badge bg-success mb-2">Stage 3: Bridge</div>
+          <h5 class="h6 fw-bold mb-1">Map to Schema</h5>
+          <p class="small text-muted mb-0">
+            Convert the gathered DOM cells into domain properties using a configured column schema.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-3 bg-light rounded border">
+        <h6 class="small fw-bold text-dark mb-1">The Data Flow:</h6>
+        <div class="font-monospace small text-primary">
+          [Clicked Button] &rarr; [Row Element] &rarr; [Array of Cells] &rarr; { itemName: "...", category: "..." }
+        </div>
+      </div>
+    </section>
+
+    <!-- Declarative Recipe vs Imperative Code -->
+    <section class="card shadow-sm border-0 p-4 mb-4">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-file-earmark-code text-primary me-2"></i> 3. Expressing the Journey as a JSON Recipe
+      </h2>
+      <p>
+        Because these three stages are universal, we don't need to write custom JavaScript functions for each table. Instead, we express the extraction steps as a simple <strong>JSON pipeline</strong>:
+      </p>
+
+      <pre><code>[
+  {
+    "narration": "Step 1: Anchor to row boundary",
+    "sourcePath": { "fileName": "root" },
+    "func": "closest",
+    "arguments": { "selector": "tr" }
+  },
+  {
+    "narration": "Step 2: Collect payload cells",
+    "sourcePath": { "fileName": "previous" },
+    "func": "querySelectorAll",
+    "arguments": { "selector": "td:not(:last-child)" }
+  },
+  {
+    "narration": "Step 3: Map cells into an object",
+    "sourcePath": { "fileName": "previous" },
+    "func": "mapValues",
+    "arguments": { "read": "text" }
+  }
+]</code></pre>
+
+      <p class="mb-0 text-muted small">
+        Notice how readable this is! Any developer, tester, or even backend service can inspect this JSON and immediately understand the exact journey from button click to JavaScript object.
+      </p>
+    </section>
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <a href="./01-the-habit-and-the-trap.html" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Chapter 1: The Traps
+      </a>
+      <a href="./03-the-three-primitives.html" class="btn btn-primary">
+        Next: Chapter 3 — The Three Primitives in Action <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+  </main>
+
+</body>
+
+</html>
+

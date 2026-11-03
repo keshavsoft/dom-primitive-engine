@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Primitive Engine (v13) — Architecture & Story Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #334155;
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 56px 0;
+      margin-bottom: 40px;
+    }
+    .story-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      transition: all 0.2s ease-in-out;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 100%;
+    }
+    .story-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+      border-color: #93c5fd;
+      color: inherit;
+    }
+    pre {
+      background-color: #0f172a;
+      color: #f1f5f9;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    code:not(pre code) {
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="hero-banner shadow-sm">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <span class="badge bg-primary mb-2">v13 · Single Source of Truth</span>
+          <h1 class="display-6 fw-bold mb-2">DOM Primitive Engine</h1>
+          <p class="lead mb-0 text-slate-300 opacity-75">
+            Browser-native, declarative, instruction-driven DOM extraction with zero external dependencies.
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="https://github.com/keshavsoft/dom-primitive-engine" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-github me-1"></i> Repository
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5" style="max-width: 1000px;">
+
+    <!-- Section 1: The Interactive Story Chapters -->
+    <section class="mb-5">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+          <h2 class="h4 fw-bold text-dark mb-1">
+            <i class="bi bi-book-half text-primary me-2"></i> The Table Extraction Story
+          </h2>
+          <p class="text-muted small mb-0">Follow the journey from brittle everyday habits to unbreakable, declarative extraction:</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Chapter 1 -->
+        <div class="col-md-6">
+          <a href="./stories/01-the-habit-and-the-trap.html" class="story-card p-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-danger">Chapter 1</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+            </div>
+            <h3 class="h5 fw-bold text-dark mb-2">The Everyday Habit & The Traps</h3>
+            <p class="small text-muted mb-0">
+              How developers usually extract table rows, why it feels easy on Day 1, and how icons, serial columns, and input fields silently break it.
+            </p>
+          </a>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="col-md-6">
+          <a href="./stories/02-the-pipeline-concept.html" class="story-card p-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-primary">Chapter 2</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+            </div>
+            <h3 class="h5 fw-bold text-dark mb-2">The Pipeline Epiphany</h3>
+            <p class="small text-muted mb-0">
+              The core insight: separating the click trigger from the extraction journey. The 3-stage mental model: Anchor, Filter, and Bridge.
+            </p>
+          </a>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="col-md-6">
+          <a href="./stories/03-the-three-primitives.html" class="story-card p-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-purple text-white" style="background:#7c3aed;">Chapter 3</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+            </div>
+            <h3 class="h5 fw-bold text-dark mb-2">The Three Primitives in Action</h3>
+            <p class="small text-muted mb-0">
+              Deep dive into the 3 atomic operations: <code>closest("tr")</code>, <code>querySelectorAll("td")</code>, and <code>mapValues</code>.
+            </p>
+          </a>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="col-md-6">
+          <a href="./stories/04-the-solution-and-the-joy.html" class="story-card p-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-success">Chapter 4</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+            </div>
+            <h3 class="h5 fw-bold text-dark mb-2">Implementation & The Joy of Clean Data</h3>
+            <p class="small text-muted mb-0">
+              Interactive live demo running v13! How 4 lines of code give you robust, unbreakable table extraction that never breaks.
+            </p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Technical Reference & Specs -->
+    <section class="card shadow-sm border-0 p-4 mb-4">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-journal-text text-primary me-2"></i> Technical Documentation & Specifications
+      </h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100">
+            <h6 class="fw-bold text-dark mb-1">
+              <a href="architecture.md" class="text-decoration-none text-primary">
+                <i class="bi bi-file-earmark-text me-1"></i> Architecture & Design Story
+              </a>
+            </h6>
+            <p class="small text-muted mb-0">
+              Detailed breakdown of renderer separation (e.g. <code>json-renderers</code>), data flow diagrams, and edge cases.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100">
+            <h6 class="fw-bold text-dark mb-1">
+              <a href="instruction-spec.md" class="text-decoration-none text-primary">
+                <i class="bi bi-file-earmark-code me-1"></i> Instruction Specification
+              </a>
+            </h6>
+            <p class="small text-muted mb-0">
+              Normative schema definition for <code>instructions.json</code>, argument types, and primitive signatures.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quickstart Code -->
+    <section class="card shadow-sm border-0 p-4">
+      <h2 class="h5 fw-bold text-dark mb-2">
+        <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Quick Start
+      </h2>
+      <p class="small text-muted mb-3">Include the engine and execute instructions from any event listener:</p>
+
+      <pre class="mb-0"><code>import { runInstructions } from "dom-primitive-engine";
+// Or in browser: window.ks.domPrimitiveEngine.runInstructions(...)
+
+button.addEventListener("click", (event) => {
+  const rowData = runInstructions(event.currentTarget, instructions, {
+    columns: ["itemName", "category", "rate"]
+  });
+  console.log("Row Data:", rowData);
+});</code></pre>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-muted py-4 border-top small">
+    DOM Primitive Engine · Single Source of Truth: <code>v13</code> · MIT License
+  </footer>
+
+</body>
+
+</html>

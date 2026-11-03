@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 3: The Three Primitives in Action — DOM Primitive Engine</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #334155;
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+    }
+    .story-hero {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      color: #fff;
+      padding: 40px 0;
+    }
+    pre {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    code:not(pre code) {
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    .primitive-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .highlight-badge {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="story-hero shadow-sm mb-4">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <span class="badge bg-light text-purple mb-2" style="color:#6d28d9">Chapter 3 of 4</span>
+          <h1 class="h3 fw-bold mb-1">The Three Primitives in Action</h1>
+          <p class="text-purple-100 small mb-0">Deep dive into the 3 atomic operations: closest, querySelectorAll, and mapValues.</p>
+        </div>
+        <a href="../index.html" class="btn btn-outline-light btn-sm">
+          <i class="bi bi-arrow-left me-1"></i> Story Index
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5" style="max-width: 900px;">
+
+    <!-- Primitive 1: closest -->
+    <section class="primitive-card shadow-sm">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 fw-bold text-dark mb-0">
+          <span class="badge bg-primary me-2">1</span> Instruction 1: <code>closest("tr")</code>
+        </h2>
+        <span class="highlight-badge bg-primary text-white">Ascend to Boundary</span>
+      </div>
+
+      <p>
+        <strong>The Problem:</strong> When a user clicks a button, the click might land on the button, an icon tag inside the button (<code>&lt;i class="bi bi-eye"&gt;&lt;/i&gt;</code>), or a text span. Imperative code like <code>e.target.parentElement.parentElement</code> breaks immediately.
+      </p>
+
+      <p>
+        <strong>The Primitive Solution:</strong> <code>closest(selector)</code> inspects the target and walks up the DOM ancestor chain until it finds the nearest matching selector:
+      </p>
+
+      <pre><code>{
+  "sourcePath": { "fileName": "root" },
+  "func": "closest",
+  "arguments": { "selector": "tr" }
+}</code></pre>
+
+      <div class="alert alert-light border small mb-0">
+        <i class="bi bi-shield-check text-success me-1"></i> 
+        <strong>Immune to nesting:</strong> Whether the click landed on an icon 3 levels deep or the button itself, <code>closest("tr")</code> always locks reliably onto the containing row.
+      </div>
+    </section>
+
+    <!-- Primitive 2: querySelectorAll -->
+    <section class="primitive-card shadow-sm">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 fw-bold text-dark mb-0">
+          <span class="badge bg-info text-dark me-2">2</span> Instruction 2: <code>querySelectorAll</code>
+        </h2>
+        <span class="highlight-badge bg-info text-dark">Filter Payload</span>
+      </div>
+
+      <p>
+        <strong>The Problem:</strong> A table row contains not just data, but layout noise: action buttons, checkboxes, and serial numbers. If you simply take all children, your data indexes become corrupt.
+      </p>
+
+      <p>
+        <strong>The Primitive Solution:</strong> Query the row using CSS negation selectors to gather <em>only</em> the cells holding business data:
+      </p>
+
+      <pre><code>// Exclude the last cell (the Action/Options button column):
+{
+  "sourcePath": { "fileName": "previous" },
+  "func": "querySelectorAll",
+  "arguments": { "selector": "td:not(:last-child)" }
+}
+
+// Or if a serial number column exists, exclude first and last:
+"selector": "td:not(:first-child):not(:last-child)"</code></pre>
+
+      <div class="alert alert-light border small mb-0">
+        <i class="bi bi-funnel text-primary me-1"></i> 
+        <strong>Self-filtering:</strong> The selector discards button cells before mapping even begins. The output of this step is a clean array of pure data cells.
+      </div>
+    </section>
+
+    <!-- Primitive 3: mapValues -->
+    <section class="primitive-card shadow-sm">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 fw-bold text-dark mb-0">
+          <span class="badge bg-success me-2">3</span> Instruction 3: <code>mapValues</code>
+        </h2>
+        <span class="highlight-badge bg-success text-white">Bridge to Schema</span>
+      </div>
+
+      <p>
+        <strong>The Problem:</strong> The browser only gives you DOM nodes. Your application needs a typed, structured JavaScript object with semantic property names.
+      </p>
+
+      <p>
+        <strong>The Primitive Solution:</strong> <code>mapValues</code> takes the array of cells, pairs each cell index with <code>clientData.columns</code>, reads the cell content, and produces a clean object:
+      </p>
+
+      <pre><code>// Instruction:
+{
+  "sourcePath": { "fileName": "previous" },
+  "func": "mapValues",
+  "arguments": { "read": "text" }
+}
+
+// Client Data Schema:
+const clientData = {
+  columns: ["itemName", "category", "rate"]
+};
+
+// Output:
+{
+  "itemName": "High Tensile Bolt",
+  "category": "Fasteners",
+  "rate": "1200.00"
+}</code></pre>
+
+      <div class="alert alert-light border small mb-0">
+        <i class="bi bi-magic text-success me-1"></i> 
+        <strong>Smart Value Reading:</strong> If a cell contains an <code>&lt;input&gt;</code> or <code>&lt;select&gt;</code> instead of plain text, changing <code>read: "value"</code> automatically reads <code>.value</code> or <code>.checked</code> without writing custom form extraction code.
+      </div>
+    </section>
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <a href="./02-the-pipeline-concept.html" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Chapter 2: The Pipeline
+      </a>
+      <a href="./04-the-solution-and-the-joy.html" class="btn btn-primary">
+        Next: Chapter 4 — The Implementation & The Joy <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+  </main>
+
+</body>
+
+</html>
+
