@@ -10,7 +10,8 @@
   },
   "files": [
     "src/index.js",
-    "src/v4",
+    "src/v13",
+    "docs",
     "README.md",
     "LICENSE"
   ],

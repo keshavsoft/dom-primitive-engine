@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Primitive Engine (v13) — Architecture & Guide</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-accent: #0d6efd;
+      --card-bg: #ffffff;
+      --code-bg: #1e293b;
+    }
+    body {
+      background-color: #f8fafc;
+      color: #334155;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 48px 0;
+      margin-bottom: 36px;
+    }
+    .flow-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 16px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .flow-arrow {
+      color: #64748b;
+      font-weight: bold;
+      margin: 0 8px;
+    }
+    pre {
+      background-color: var(--code-bg);
+      color: #f1f5f9;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      overflow-x: auto;
+    }
+    code:not(pre code) {
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    .card-feature {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      transition: transform 0.15s ease-in-out;
+    }
+    .card-feature:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="hero-banner shadow-sm">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <span class="badge bg-primary mb-2">v13 · Single Source of Truth</span>
+          <h1 class="display-6 fw-bold mb-2">DOM Primitive Engine</h1>
+          <p class="lead mb-0 text-slate-300 opacity-75">
+            Browser-native, declarative, instruction-driven DOM extraction with zero external dependencies.
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="https://github.com/keshavsoft/dom-primitive-engine" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-github me-1"></i> Repository
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+
+    <!-- Section 1: The Problem & Solution -->
+    <section class="row g-4 mb-5">
+      <div class="col-md-6">
+        <div class="card h-100 card-feature shadow-sm p-4">
+          <h2 class="h5 fw-bold text-danger mb-3">
+            <i class="bi bi-x-circle me-2"></i> The Problem: Brittle Traversal
+          </h2>
+          <p class="text-muted small">
+            When users click inside dynamic tables or forms, developers frequently write imperative, tightly-coupled queries:
+          </p>
+          <pre><code>// Brittle & fragile:
+const row = btn.closest("tr");
+const cells = row.querySelectorAll("td");
+const item = {
+  name: cells[1].innerText, // Breaks if serial # is added!
+  category: cells[2].innerText
+};</code></pre>
+          <p class="text-muted small mb-0">
+            Adding a checkbox column or moving an action button silently corrupts the extracted data.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card h-100 card-feature shadow-sm p-4">
+          <h2 class="h5 fw-bold text-success mb-3">
+            <i class="bi bi-check-circle me-2"></i> The Solution: Declarative Pipelines
+          </h2>
+          <p class="text-muted small">
+            The event listener receives the click, while an <code>instructions.json</code> pipeline defines the extraction journey:
+          </p>
+          <pre><code>// Clean & decoupled:
+button.addEventListener("click", (e) => {
+  const rowData = extractRow(e.currentTarget);
+  console.log("Extracted:", rowData);
+});</code></pre>
+          <p class="text-muted small mb-0">
+            Decouples UI rendering from data extraction. Extraction rules can be shared, versioned, or loaded dynamically.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Journey Flow -->
+    <section class="card shadow-sm p-4 mb-5 border-0">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-diagram-3 text-primary me-2"></i> The 3-Stage Pipeline Lifecycle
+      </h2>
+      <p class="text-muted small mb-4">
+        Each step receives an input, executes an atomic DOM primitive, and forwards the result to the next step:
+      </p>
+
+      <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 py-3 bg-light rounded-3 mb-4">
+        <div class="flow-badge text-primary">
+          <i class="bi bi-cursor me-1"></i> Clicked Element (root)
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-badge text-dark">
+          <i class="bi bi-arrow-up-circle me-1"></i> 1. closest("tr")
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-badge text-dark">
+          <i class="bi bi-grid-3x3 me-1"></i> 2. querySelectorAll("td")
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-badge text-dark">
+          <i class="bi bi-arrow-repeat me-1"></i> 3. mapValues(columns)
+        </div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-badge text-success">
+          <i class="bi bi-filetype-json me-1"></i> Clean JS Object
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: The Instruction Contract -->
+    <section class="card shadow-sm p-4 mb-5 border-0">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-braces text-primary me-2"></i> The Instruction Contract (v13)
+      </h2>
+      <p class="text-muted small">
+        Below is the exact <code>instructions.json</code> executed by the v13 engine:
+      </p>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <pre><code>[
+  {
+    "narration": "Find the table row containing clicked element",
+    "sourcePath": { "fileName": "root" },
+    "func": "closest",
+    "arguments": { "selector": "tr" }
+  },
+  {
+    "narration": "Collect data cells from the row",
+    "sourcePath": { "fileName": "previous" },
+    "func": "querySelectorAll",
+    "arguments": { "selector": "td:not(:last-child)" }
+  },
+  {
+    "narration": "Map cell values to client columns",
+    "sourcePath": { "fileName": "previous" },
+    "func": "mapValues",
+    "arguments": { "read": "text" }
+  }
+]</code></pre>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm small">
+              <thead class="table-light">
+                <tr>
+                  <th>Field</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>narration</code></td>
+                  <td>Human-readable description for debugging and logging.</td>
+                </tr>
+                <tr>
+                  <td><code>sourcePath.fileName</code></td>
+                  <td>
+                    Where the input originates:
+                    <ul class="mb-0 ps-3">
+                      <li><code>"root"</code>: Starting element (event target)</li>
+                      <li><code>"previous"</code>: Output of preceding step</li>
+                      <li><code>"clientData"</code>: Shared client data</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>func</code></td>
+                  <td>The primitive function to run (e.g. <code>closest</code>, <code>querySelectorAll</code>, <code>mapValues</code>).</td>
+                </tr>
+                <tr>
+                  <td><code>arguments</code></td>
+                  <td>Arguments passed to the operation (e.g. CSS selector, read mode).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Available Primitives -->
+    <section class="card shadow-sm p-4 mb-5 border-0">
+      <h2 class="h5 fw-bold text-dark mb-3">
+        <i class="bi bi-tools text-primary me-2"></i> Standard Primitives in v13
+      </h2>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle small">
+          <thead class="table-light">
+            <tr>
+              <th>Primitive</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Signature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>closest</code></td>
+              <td><span class="badge bg-info text-dark">find</span></td>
+              <td>Finds nearest ancestor-or-self matching the CSS selector.</td>
+              <td><code>(input, { selector })</code></td>
+            </tr>
+            <tr>
+              <td><code>querySelectorAll</code></td>
+              <td><span class="badge bg-info text-dark">find</span></td>
+              <td>Queries child elements matching selector; returns JS Array.</td>
+              <td><code>(input, { selector })</code></td>
+            </tr>
+            <tr>
+              <td><code>readText</code></td>
+              <td><span class="badge bg-success">read</span></td>
+              <td>Reads <code>.textContent</code> with optional whitespace trimming.</td>
+              <td><code>(input, { trim: true })</code></td>
+            </tr>
+            <tr>
+              <td><code>readValue</code></td>
+              <td><span class="badge bg-success">read</span></td>
+              <td>Smart-reads form controls: checkbox checked state, select values, inputs.</td>
+              <td><code>(input)</code></td>
+            </tr>
+            <tr>
+              <td><code>mapValues</code></td>
+              <td><span class="badge bg-primary">mapping</span></td>
+              <td>Maps an array of elements by index to <code>clientData.columns</code>.</td>
+              <td><code>(elements, { columns, read }, clientData)</code></td>
+            </tr>
+            <tr>
+              <td><code>mapNamedValues</code></td>
+              <td><span class="badge bg-primary">mapping</span></td>
+              <td>Extracts controls with <code>name</code> attributes into <code>{ [name]: value }</code>.</td>
+              <td><code>(controls)</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-muted py-4 border-top small">
+    DOM Primitive Engine · Single Source of Truth: <code>v13</code> · MIT License
+  </footer>
+
+</body>
+
+</html>

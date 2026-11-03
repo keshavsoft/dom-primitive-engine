@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Primitive Engine V9 — The Architecture Story</title>
+    <style>
+        :root {
+            font-family: Arial, sans-serif;
+            color: #243044;
+            background: #f4f6fa;
+            line-height: 1.65;
+        }
+
+        body {
+            max-width: 1080px;
+            margin: auto;
+            padding: 28px 22px 60px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            line-height: 1.3;
+        }
+
+        h1 {
+            color: #173b68;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            margin-top: 42px;
+            padding-bottom: 8px;
+            color: #173b68;
+            border-bottom: 1px solid #d7deea;
+        }
+
+        h3 {
+            color: #245a86;
+        }
+
+        .lead,
+        .callout,
+        .boundary,
+        .result {
+            padding: 18px;
+            border-radius: 9px;
+            margin: 18px 0;
+        }
+
+        .lead {
+            background: #e7effb;
+        }
+
+        .callout {
+            background: #fff4d9;
+        }
+
+        .boundary {
+            background: #edf0f5;
+        }
+
+        .result {
+            background: #e5f5eb;
+        }
+
+        .stage {
+            padding: 18px;
+            margin: 14px 0;
+            background: white;
+            border: 1px solid #d9e1ec;
+            border-radius: 9px;
+        }
+
+        .stage-label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+            color: #3573a5;
+        }
+
+        .flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin: 22px 0;
+        }
+
+        .flow span {
+            background: white;
+            border: 1px solid #cad6e5;
+            border-radius: 7px;
+            padding: 10px 12px;
+            font-weight: bold;
+        }
+
+        .flow b {
+            color: #54718e;
+        }
+
+        code,
+        pre {
+            font-family: Consolas, monospace;
+        }
+
+        code {
+            background: #eaf0f6;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        pre {
+            overflow-x: auto;
+            padding: 16px;
+            border-radius: 8px;
+            background: #172333;
+            color: #edf4ff;
+            line-height: 1.55;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 18px 0;
+        }
+
+        th,
+        td {
+            padding: 11px;
+            border: 1px solid #d8e0eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #e7effb;
+        }
+
+        .muted {
+            color: #647187;
+        }
+
+        footer {
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 1px solid #d7deea;
+            color: #647187;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <p class="stage-label">DOM PRIMITIVE ENGINE · V9</p>
+        <h1>The Story Behind Table Extraction</h1>
+        <p>
+            From a button click to a JavaScript object:
+            understanding the responsibilities, instructions, and decisions
+            that make the extraction reusable.
+        </p>
+    </header>
+
+    <section class="lead">
+        <h2 style="margin-top:0">The central question</h2>
+        <p>
+            How can an application extract data from a table without writing
+            separate, hardcoded DOM traversal logic for every table?
+        </p>
+        <p>
+            The idea is to describe the extraction steps as instructions and let
+            the engine execute them. The application supplies the starting element;
+            the instructions describe the journey; the result is ordinary data.
+        </p>
+    </section>
+
+    <h2>1. See the complete journey</h2>
+
+    <div class="flow">
+        <span>Button click</span><b>→</b>
+        <span>Starting element</span><b>→</b>
+        <span>Find row</span><b>→</b>
+        <span>Collect cells</span><b>→</b>
+        <span>Map values</span><b>→</b>
+        <span>Object</span>
+    </div>
+
+    <p>
+        Each stage has one responsibility. The output of one operation becomes
+        the input to the next operation.
+    </p>
+
+    <h2>2. Start with a real table</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Keyboard</td>
+                <td>Accessories</td>
+                <td>35</td>
+                <td>Extract button</td>
+            </tr>
+            <tr>
+                <td>Mouse</td>
+                <td>Accessories</td>
+                <td>20</td>
+                <td>Extract button</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        Imagine the user clicks Extract in the Keyboard row. We want only the
+        Keyboard data. If they click Extract in the Mouse row, the same extraction
+        definition should return Mouse data instead.
+    </p>
+
+    <h2>3. Follow the data through each stage</h2>
+
+    <section class="stage">
+        <p class="stage-label">STAGE 1 · INPUT</p>
+        <h3>Receive the starting element</h3>
+        <p>
+            The application handles the click event and supplies the appropriate
+            starting DOM element to the pipeline.
+        </p>
+        <pre>Starting value: clicked button</pre>
+        <p>
+            The event handler belongs to the application. It should not be confused
+            with the engine's job of traversing and reading the DOM.
+        </p>
+    </section>
+
+    <section class="stage">
+        <p class="stage-label">STAGE 2 · LOCATE</p>
+        <h3>Find the containing row</h3>
+        <pre>closest("tr")</pre>
+        <p><strong>Input:</strong> the clicked button.</p>
+        <p><strong>Action:</strong> find the nearest ancestor-or-self matching the selector.</p>
+        <p><strong>Output:</strong> the row containing that button.</p>
+        <p>
+            The selected row is determined by the starting element, not by a
+            hardcoded row number.
+        </p>
+    </section>
+
+    <section class="stage">
+        <p class="stage-label">STAGE 3 · COLLECT</p>
+        <h3>Collect the relevant cells</h3>
+        <pre>queryAll("td:not(:last-child)")</pre>
+        <p><strong>Input:</strong> the selected row.</p>
+        <p><strong>Action:</strong> find its data cells, excluding the final action cell.</p>
+        <p><strong>Output:</strong> an ordered collection of three cells.</p>
+        <p>
+            This selector assumes the action cell is always the last cell.
+            If the table structure changes, the selector may need to change too.
+        </p>
+    </section>
+
+    <section class="stage">
+        <p class="stage-label">STAGE 4 · TRANSFORM</p>
+        <h3>Turn the collection into an object</h3>
+        <pre>{
+  "columns": ["itemName", "category", "price"],
+  "read": "text"
+}</pre>
+        <p><strong>Input:</strong> the ordered collection of cells.</p>
+        <p><strong>Action:</strong> read each cell and pair its value with a configured key.</p>
+        <p><strong>Output:</strong> an object with meaningful property names.</p>
+        <p>
+            The mapping is positional: the first cell corresponds to the first key,
+            the second cell to the second key, and so on.
+        </p>
+    </section>
+
+    <section class="result">
+        <h3>The final result</h3>
+        <pre>{
+  "itemName": "Keyboard",
+  "category": "Accessories",
+  "price": "35"
+}</pre>
+        <p>
+            The output no longer depends on the DOM. Application code can pass the
+            object to another function, serialize it as JSON, or send it to an API.
+        </p>
+    </section>
+
+    <h2>4. What does the instruction contract mean?</h2>
+
+    <p>
+        An instruction is a description of one operation. It tells the engine
+        what operation to perform and what information that operation needs.
+    </p>
+
+    <pre>[
+  {
+    "op": "closest",
+    "args": {
+      "selector": "tr"
+    }
+  },
+  {
+    "op": "queryAll",
+    "args": {
+      "selector": "td:not(:last-child)"
+    }
+  },
+  {
+    "op": "toObject",
+    "args": {
+      "columns": ["itemName", "category", "price"],
+      "read": "text"
+    }
+  }
+]</pre>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Term</th>
+                <th>Meaning</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>op</code></td>
+                <td>The operation the engine should execute.</td>
+                <td><code>closest</code></td>
+            </tr>
+            <tr>
+                <td><code>args</code></td>
+                <td>The settings required by that operation.</td>
+                <td><code>selector: "tr"</code></td>
+            </tr>
+            <tr>
+                <td><code>selector</code></td>
+                <td>A CSS rule used to locate elements.</td>
+                <td><code>td:not(:last-child)</code></td>
+            </tr>
+            <tr>
+                <td><code>columns</code></td>
+                <td>The ordered object keys for the collected values.</td>
+                <td><code>["itemName", "category", "price"]</code></td>
+            </tr>
+            <tr>
+                <td><code>read</code></td>
+                <td>The requested way to read values.</td>
+                <td><code>text</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout">
+        <strong>An important design decision</strong>
+        <p>
+            We should decide whether the public contract uses short names such as
+            <code>op</code> and <code>args</code>, or explicit names such as
+            <code>operation</code> and <code>arguments</code>.
+        </p>
+        <p>
+            The longer names may be easier to understand in documentation and
+            configuration files. However, the implementation, samples, and tests
+            must all use the same contract. This is a design decision to settle,
+            not a change to make silently in documentation.
+        </p>
+    </div>
+
+    <h2>5. Why have a pipeline?</h2>
+
+    <p>
+        Without a pipeline, an application might write the entire extraction
+        directly in its click handler:
+    </p>
+
+    <pre>const row = button.closest("tr");
+const cells = row.querySelectorAll("td:not(:last-child)");
+
+const item = {
+  itemName: cells[0].textContent.trim(),
+  category: cells[1].textContent.trim(),
+  price: cells[2].textContent.trim()
+};</pre>
+
+    <p>
+        That code is understandable for one table. But if several tables and
+        forms need similar extraction, applications may repeat the same traversal
+        and conversion logic.
+    </p>
+
+    <p>
+        With an instruction-driven engine, the application can reuse the
+        execution mechanism and supply a different instruction sequence for
+        a different structure.
+    </p>
+
+    <div class="boundary">
+        <strong>The engine does not eliminate the need to describe the DOM.</strong>
+        <p>
+            It moves that description into an explicit contract so the application
+            logic and the extraction rules can be managed separately.
+        </p>
+    </div>
+
+    <h2>6. Keep the responsibilities separate</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Its responsibility</th>
+                <th>What it should not secretly decide</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Application event handler</td>
+                <td>Respond to the click and choose the starting element.</td>
+                <td>How every field is extracted.</td>
+            </tr>
+            <tr>
+                <td>Instruction definition</td>
+                <td>Describe the operations and their arguments.</td>
+                <td>Execute DOM operations by itself.</td>
+            </tr>
+            <tr>
+                <td>Pipeline</td>
+                <td>Execute operations in order and pass results forward.</td>
+                <td>Invent application-specific field mappings.</td>
+            </tr>
+            <tr>
+                <td>Primitive operation</td>
+                <td>Perform a defined lookup or transformation.</td>
+                <td>Know the business meaning of every table column.</td>
+            </tr>
+            <tr>
+                <td>Application consumer</td>
+                <td>Use the resulting object.</td>
+                <td>Depend on the DOM traversal details unnecessarily.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>7. What can go wrong?</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Situation</th>
+                <th>Why it matters</th>
+                <th>Expected design response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>No matching row</td>
+                <td>The starting element may not belong to a table row.</td>
+                <td>Fail clearly rather than returning misleading data.</td>
+            </tr>
+            <tr>
+                <td>Unexpected number of cells</td>
+                <td>The table may have changed.</td>
+                <td>Define whether to reject the data or handle missing values.</td>
+            </tr>
+            <tr>
+                <td>Column order changes</td>
+                <td>Positional mapping can assign values to the wrong keys.</td>
+                <td>Keep the mapping aligned with the table structure or use explicit field selectors.</td>
+            </tr>
+            <tr>
+                <td>Cell contains an input</td>
+                <td>Displayed text and entered value are different things.</td>
+                <td>Choose the appropriate read mode and define its behavior.</td>
+            </tr>
+            <tr>
+                <td>Unknown operation</td>
+                <td>The instruction may contain a typo or unsupported operation.</td>
+                <td>Report the invalid operation clearly.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>8. The same idea can serve other structures</h2>
+
+    <h3>Table</h3>
+    <p>
+        Start from a clicked row action, locate the row, collect cells,
+        and map values to an object.
+    </p>
+
+    <h3>Form</h3>
+    <p>
+        Start from a form, collect relevant controls, read their values,
+        and map them to an object.
+    </p>
+
+    <h3>Other DOM structures</h3>
+    <p>
+        Reuse the same execution model when the required operations are supported.
+        A new structure may need different selectors or a different mapping.
+    </p>
+
+    <p>
+        Reuse does not mean every DOM structure needs the same instructions.
+        It means the engine can execute different descriptions through a
+        consistent mechanism.
+    </p>
+
+    <h2>9. The design we want to preserve</h2>
+
+    <div class="lead">
+        <ol>
+            <li>The application supplies the starting element.</li>
+            <li>The instructions describe the extraction journey.</li>
+            <li>The pipeline executes each operation in order.</li>
+            <li>Each operation has a clear responsibility.</li>
+            <li>The final result is application-friendly data.</li>
+        </ol>
+    </div>
+
+    <p>
+        If we keep these boundaries clear, future improvements to the instruction
+        vocabulary or the primitive operations become easier to reason about.
+    </p>
+
+    <footer>
+        Companion document for docs/index.html.
+        This is a design explanation; confirm selectors, event wiring,
+        error behavior, and instruction property names against the actual
+        V9 implementation before treating the examples as a normative API contract.
+    </footer>
+</body>
+
+</html>
