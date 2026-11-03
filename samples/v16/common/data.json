@@ -1,0 +1,43 @@
+[
+  {
+    "itemName": "0.09/30mm High Tensile Bolt",
+    "category": "Fasteners",
+    "baseUnit": "kgs",
+    "openingRate": "1200.00/kgs",
+    "inStock": true,
+    "notes": "Grade 8.8 tensile steel bolt for industrial heavy machinery."
+  },
+  {
+    "itemName": "0.11-25 Galvanized Wire Coil",
+    "category": "Raw Materials",
+    "baseUnit": "kgs",
+    "openingRate": "1450.00/kgs",
+    "inStock": true,
+    "notes": "Zinc coated anti-corrosive high-durability wire coil."
+  },
+  {
+    "itemName": "0.11-30 Stainless Steel Rod",
+    "category": "Raw Materials",
+    "baseUnit": "pcs",
+    "openingRate": "890.00/pcs",
+    "inStock": false,
+    "notes": "SS 304 grade precision polished shaft rod."
+  },
+  {
+    "itemName": "0.15-40 Brass Hex Nut",
+    "category": "Fasteners",
+    "baseUnit": "boxes",
+    "openingRate": "350.00/box",
+    "inStock": true,
+    "notes": "Corrosion resistant precision brass hex nuts."
+  },
+  {
+    "itemName": "0.20-50 Aluminum Profile",
+    "category": "Extrusions",
+    "baseUnit": "meters",
+    "openingRate": "620.00/meter",
+    "inStock": true,
+    "notes": "Anodized T-slot aluminum architectural profile."
+  }
+]
+

@@ -1,5 +1,5 @@
 const k = {
-  version: "1.14.0",
+  version: "1.15.0",
   name: "dom-primitive-engine"
 }, A = (e, o, t = k) => {
   if (!(!e || typeof globalThis > "u"))
