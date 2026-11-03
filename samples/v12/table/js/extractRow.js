@@ -1,5 +1,9 @@
-import { runInstructions } from "../../../../src/index.js";
-import instructions from "../instructions.json" with { type: "json" };
+// import { runInstructions } from "../../../../src/index.js";
+
+import "https://keshavsoft.github.io/dom-primitive-engine/dist/v13/min.js";
+
+
+import instructions from "./instructions.json" with { type: "json" };
 
 const clientData = {
   columns: ["itemName", "category", "price"],
@@ -7,4 +11,4 @@ const clientData = {
 };
 
 export const extractRow = (clickedElement) =>
-  runInstructions(clickedElement, instructions, clientData);
+  window.ks.domPrimitiveEngine(clickedElement, instructions, clientData);
