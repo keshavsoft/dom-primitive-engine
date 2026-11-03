@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { runInstructions, readRow } from "../src/index.js";
+import { runInstructions, readRow, bindEvents } from "../src/index.js";
 import querySelector from "../src/v14/find/querySelector.js";
 import isKey from "../src/v14/events/isKey.js";
 
@@ -123,3 +123,71 @@ test("v14: table row extraction remains backwards compatible", () => {
   assert.deepEqual(res, { item: "Bolt", cat: "Fasteners" });
 });
 
+test("v14: bindEvents attaches delegated listeners and triggers onExtract", () => {
+  const listeners = {};
+  const mockContainer = {
+    addEventListener: (type, handler) => {
+      listeners[type] = handler;
+    },
+    contains: () => true
+  };
+
+  const mockButton = {
+    tagName: "button",
+    className: "ks-btn-show",
+    closest: (sel) => {
+      if (sel === ".ks-btn-show") return mockButton;
+      if (sel === "tr") {
+        return {
+          querySelectorAll: () => [
+            { textContent: "101" },
+            { textContent: "Steel Bolt" }
+          ]
+        };
+      }
+      return null;
+    }
+  };
+
+  let extractedData = null;
+
+  bindEvents(mockContainer, [
+    {
+      event: "click",
+      selector: ".ks-btn-show",
+      instructions: [
+        {
+          sourcePath: { fileName: "root" },
+          func: "closest",
+          arguments: { selector: "tr" }
+        },
+        {
+          sourcePath: { fileName: "previous" },
+          func: "querySelectorAll",
+          arguments: { selector: "td" }
+        },
+        {
+          sourcePath: { fileName: "previous" },
+          func: "mapValues",
+          arguments: { read: "text" }
+        }
+      ],
+      clientData: {
+        columns: ["id", "itemName"]
+      },
+      onExtract: (data) => {
+        extractedData = data;
+      }
+    }
+  ]);
+
+  // Simulate click event
+  listeners["click"]({
+    target: mockButton
+  });
+
+  assert.deepEqual(extractedData, {
+    id: "101",
+    itemName: "Steel Bolt"
+  });
+});
