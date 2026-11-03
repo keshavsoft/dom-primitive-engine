@@ -1,96 +1,96 @@
-const k = {
-  version: "1.16.0",
+const h = {
+  version: "1.17.0",
   name: "dom-primitive-engine"
-}, A = (e, o, t = k) => {
+}, E = (e, n, t = h) => {
   if (!(!e || typeof globalThis > "u"))
     return globalThis.ks ?? (globalThis.ks = {}), globalThis.ks.domPrimitiveEngine = {
       meta: t,
       runInstructions: e,
-      bindEvents: o
+      bindEvents: n
     }, globalThis.ks.domPrimitiveEngine;
-}, w = ({ element: e, previousResult: o, instruction: t, clientData: n }) => {
-  const r = t.sourcePath.fileName;
-  if (r === "root") return e;
-  if (r === "previous") return o;
-  if (r === "clientData") return n;
-}, T = (e, o) => {
-  const t = e.arguments ?? {}, n = t.columns ?? o.columns, r = t.options ?? o.options, c = t.data ?? o.data;
-  return { ...t, columns: n, options: r, data: c };
-}, _ = ({ element: e, previousResult: o, instruction: t, clientData: n, operations: r }) => {
+}, S = ({ element: e, previousResult: n, instruction: t, clientData: r }) => {
+  const o = t.sourcePath.fileName;
+  if (o === "root") return e;
+  if (o === "previous") return n;
+  if (o === "clientData") return r;
+}, b = (e, n) => {
+  const t = e.arguments ?? {}, r = t.columns ?? n.columns, o = t.options ?? n.options, c = t.data ?? n.data;
+  return { ...t, columns: r, options: o, data: c };
+}, k = ({ element: e, previousResult: n, instruction: t, clientData: r, operations: o }) => {
   var l;
-  const c = w({ element: e, previousResult: o, instruction: t, clientData: n }), s = T(t, n), u = r[t.func] ?? n[t.func] ?? ((l = n == null ? void 0 : n.functions) == null ? void 0 : l[t.func]);
+  const c = S({ element: e, previousResult: n, instruction: t, clientData: r }), s = b(t, r), u = o[t.func] ?? r[t.func] ?? ((l = r == null ? void 0 : r.functions) == null ? void 0 : l[t.func]);
   if (typeof u != "function")
     throw new TypeError(`Unknown primitive operation: "${t.func}"`);
-  return u(c, s, n);
-}, x = (e, o, t) => {
-  const n = e, r = o.selector;
-  return n.closest(r);
-}, N = (e, o, t) => {
-  const n = e, r = o.selector;
-  return !n || typeof n.querySelector != "function" ? null : n.querySelector(r);
-}, P = (e, o, t) => {
-  const n = e, r = o.selector;
-  return Array.from(n.querySelectorAll(r));
-}, q = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  return u(c, s, r);
+}, A = (e, n, t) => {
+  const r = e, o = n.selector;
+  return r.closest(o);
+}, T = (e, n, t) => {
+  const r = e, o = n.selector;
+  return !r || typeof r.querySelector != "function" ? null : r.querySelector(o);
+}, w = (e, n, t) => {
+  const r = e, o = n.selector;
+  return Array.from(r.querySelectorAll(o));
+}, x = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  closest: x,
-  querySelector: N,
-  querySelectorAll: P
-}, Symbol.toStringTag, { value: "Module" })), g = (e, o, t) => {
-  const n = e, r = o.trim ?? !0, c = n.textContent ?? "";
-  return r ? c.trim() : c;
-}, y = (e, o, t) => {
+  closest: A,
+  querySelector: T,
+  querySelectorAll: w
+}, Symbol.toStringTag, { value: "Module" })), p = (e, n, t) => {
+  const r = e, o = n.trim ?? !0, c = r.textContent ?? "";
+  return o ? c.trim() : c;
+}, f = (e, n, t) => {
   var s, u, l;
-  const n = e, r = (s = n.tagName) == null ? void 0 : s.toLowerCase(), c = (u = n.type) == null ? void 0 : u.toLowerCase();
-  return c === "checkbox" ? n.checked ? n.value || !0 : !1 : c === "radio" ? n.checked ? n.value : void 0 : r === "select" && n.multiple ? Array.from(n.selectedOptions, (a) => a.value) : "value" in n && r !== "button" ? n.value : ((l = n.textContent) == null ? void 0 : l.trim()) ?? "";
-}, p = (e, o, t) => {
-  const n = e, r = o.columns ?? t.columns ?? [], c = o.read ?? "text", s = {};
-  return n.forEach((u, l) => {
-    const a = r[l];
+  const r = e, o = (s = r.tagName) == null ? void 0 : s.toLowerCase(), c = (u = r.type) == null ? void 0 : u.toLowerCase();
+  return c === "checkbox" ? r.checked ? r.value || !0 : !1 : c === "radio" ? r.checked ? r.value : void 0 : o === "select" && r.multiple ? Array.from(r.selectedOptions, (a) => a.value) : "value" in r && o !== "button" ? r.value : ((l = r.textContent) == null ? void 0 : l.trim()) ?? "";
+}, m = (e, n, t) => {
+  const r = e, o = n.columns ?? t.columns ?? [], c = n.read ?? "text", s = {};
+  return r.forEach((u, l) => {
+    const a = o[l];
     if (!a) return;
-    const i = c === "value" ? y(u) : g(u, {});
-    s[a] = i;
+    const v = c === "value" ? f(u) : p(u, {});
+    s[a] = v;
   }), s;
-}, v = (e, o, t) => {
-  const n = e, r = {};
-  return n.forEach((c) => {
+}, y = (e, n, t) => {
+  const r = e, o = {};
+  return r.forEach((c) => {
     var l;
     const s = c.name;
     if (!s) return;
-    const u = y(c);
-    ((l = c.type) == null ? void 0 : l.toLowerCase()) === "radio" && u === void 0 || (Object.hasOwn(r, s) ? (Array.isArray(r[s]) || (r[s] = [r[s]]), r[s].push(u)) : r[s] = u);
-  }), r;
-}, j = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    const u = f(c);
+    ((l = c.type) == null ? void 0 : l.toLowerCase()) === "radio" && u === void 0 || (Object.hasOwn(o, s) ? (Array.isArray(o[s]) || (o[s] = [o[s]]), o[s].push(u)) : o[s] = u);
+  }), o;
+}, _ = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  mapNamedValues: v,
-  mapValues: p,
-  readText: g,
-  readValue: y
-}, Symbol.toStringTag, { value: "Module" })), C = (e, o, t) => {
-  const n = (o == null ? void 0 : o.key) ?? "Enter", r = e && typeof e == "object" && "key" in e ? e : (o == null ? void 0 : o.event) ?? (t == null ? void 0 : t.event);
-  return !r || r.key !== n ? null : r.target ?? r.currentTarget ?? e;
-}, O = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  mapNamedValues: y,
+  mapValues: m,
+  readText: p,
+  readValue: f
+}, Symbol.toStringTag, { value: "Module" })), N = (e, n, t) => {
+  const r = (n == null ? void 0 : n.key) ?? "Enter", o = e && typeof e == "object" && "key" in e ? e : (n == null ? void 0 : n.event) ?? (t == null ? void 0 : t.event);
+  return !o || o.key !== r ? null : o.target ?? o.currentTarget ?? e;
+}, P = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  isKey: C
-}, Symbol.toStringTag, { value: "Module" })), M = { ...q, ...j, ...O }, m = (e, o, t = {}) => {
-  let n = e;
-  for (const r of o) {
-    if (n === null)
+  isKey: N
+}, Symbol.toStringTag, { value: "Module" })), q = { ...x, ..._, ...P }, i = (e, n, t = {}) => {
+  let r = e;
+  for (const o of n) {
+    if (r === null)
       return null;
-    n = _({
+    r = k({
       element: e,
-      previousResult: n,
-      instruction: r,
+      previousResult: r,
+      instruction: o,
       clientData: t,
-      operations: M
+      operations: q
     });
   }
+  return r;
+}, d = (e) => {
+  const n = (e == null ? void 0 : e.target) ?? (e == null ? void 0 : e.currentTarget) ?? e;
+  if (!n) throw new TypeError("A DOM element or event is required");
   return n;
-}, h = (e) => {
-  const o = (e == null ? void 0 : e.target) ?? (e == null ? void 0 : e.currentTarget) ?? e;
-  if (!o) throw new TypeError("A DOM element or event is required");
-  return o;
-}, b = (e) => (Array.isArray(e) ? e : (e == null ? void 0 : e.columns) ?? []).map((t) => typeof t == "string" ? t : (t == null ? void 0 : t.columnName) ?? (t == null ? void 0 : t.name) ?? (t == null ? void 0 : t.key)), L = [
+}, g = (e) => (Array.isArray(e) ? e : (e == null ? void 0 : e.columns) ?? []).map((t) => typeof t == "string" ? t : (t == null ? void 0 : t.columnName) ?? (t == null ? void 0 : t.name) ?? (t == null ? void 0 : t.key)), j = [
   {
     sourcePath: { fileName: "root" },
     func: "closest",
@@ -101,7 +101,7 @@ const k = {
     func: "querySelectorAll",
     arguments: { selector: "td:not(:last-child)" }
   }
-], z = [
+], C = [
   {
     sourcePath: { fileName: "root" },
     func: "closest",
@@ -112,43 +112,50 @@ const k = {
     func: "querySelectorAll",
     arguments: { selector: "input, select, textarea" }
   }
-], F = (e, o = []) => {
-  const t = m(h(e), L);
-  return p(t, { columns: b(o), read: "text" });
-}, G = (e, o = []) => {
-  const t = m(h(e), z);
-  return Array.from(t).some((n) => n.name) ? v(t) : p(t, { columns: b(o), read: "value" });
-}, R = (e, o = []) => {
-  const t = typeof e == "string" ? document.getElementById(e) || document.querySelector(e) : e;
-  if (!t)
-    return console.warn(`[dom-primitive-engine] bindEvents: Container not found for "${e}"`), null;
+], V = (e, n = []) => {
+  const t = i(d(e), j);
+  return m(t, { columns: g(n), read: "text" });
+}, F = (e, n = []) => {
+  const t = i(d(e), C);
+  return Array.from(t).some((r) => r.name) ? y(t) : m(t, { columns: g(n), read: "value" });
+}, O = (e) => typeof e == "string" ? document.getElementById(e) || document.querySelector(e) : e ?? null, L = (e = []) => {
   const n = /* @__PURE__ */ new Map();
-  for (const r of o) {
-    if (!r || !r.event) continue;
-    const c = n.get(r.event) ?? [];
-    c.push(r), n.set(r.event, c);
+  for (const t of e) {
+    if (!(t != null && t.event)) continue;
+    const r = n.get(t.event) ?? [];
+    r.push(t), n.set(t.event, r);
   }
-  for (const [r, c] of n.entries())
-    t.addEventListener(r, (s) => {
-      var u, l, a;
-      for (const i of c) {
-        const f = (l = (u = s.target) == null ? void 0 : u.closest) == null ? void 0 : l.call(u, i.selector);
-        if (!f || !t.contains(f))
-          continue;
-        const E = i.root === "event" || (a = s == null ? void 0 : s.type) != null && a.startsWith("key") ? s : f, S = {
-          ...i.clientData,
-          event: s,
-          targetElement: f
-        }, d = (i.runner ?? m)(E, i.instructions, S);
-        d != null && typeof i.onExtract == "function" && i.onExtract(d, s, f);
-      }
-    });
+  return n;
+}, M = (e, n, t) => {
+  var r;
+  return e.root === "event" || (r = n == null ? void 0 : n.type) != null && r.startsWith("key") ? n : t;
+}, I = (e, n, t) => ({
+  ...e.clientData,
+  event: n,
+  targetElement: t
+}), z = ({ binding: e, event: n, matchElement: t }) => {
+  const r = M(e, n, t), o = I(e, n, t), s = (e.runner ?? i)(r, e.instructions, o);
+  return s != null && typeof e.onExtract == "function" && e.onExtract(s, n, t), s;
+}, B = (e, n, t) => {
+  e.addEventListener(n, (r) => {
+    var o, c;
+    for (const s of t) {
+      const u = (c = (o = r.target) == null ? void 0 : o.closest) == null ? void 0 : c.call(o, s.selector);
+      !u || !e.contains(u) || z({ binding: s, event: r, matchElement: u });
+    }
+  });
+}, R = (e, n = []) => {
+  const t = O(e);
+  if (!t) return null;
+  const r = L(n);
+  for (const [o, c] of r.entries())
+    B(t, o, c);
   return t;
 };
-A(m, R);
+E(i, R);
 export {
   R as bindEvents,
-  G as readFooter,
-  F as readRow,
-  m as runInstructions
+  F as readFooter,
+  V as readRow,
+  i as runInstructions
 };

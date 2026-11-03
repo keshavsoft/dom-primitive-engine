@@ -1,5 +1,5 @@
 export const meta = {
-    version: "1.16.0",
+    version: "1.17.0",
     name: "dom-primitive-engine"
 };
 
